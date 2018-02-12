@@ -1,4 +1,18 @@
 .DS_Store
 tmp
 *.py
+node_modules
+dist
+
+############################################################################
+# Jetbrains
+############################################################################
+## File-based project format
+*.ipr
+*.iws
+*.iml
+.shelf/
+
+## Directory-based project format
+.idea/
 
