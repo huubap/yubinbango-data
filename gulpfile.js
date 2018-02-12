@@ -10,12 +10,12 @@ gulp.task('clean', () =>{
 })
 ;
 
-gulp.task('zipcode_build',['create_build_directory'] () => {
+gulp.task('zipcode_build',['createBuildDirectory'], () => {
     gulp.start('s3replaceAndUpload');
 })
 ;
 
-gulp.task('create_build_directory', () => {
+gulp.task('createBuildDirectory', () => {
     return gulp.src('data/*.js')
         .pipe(gulp.dest('dist'));
 })
