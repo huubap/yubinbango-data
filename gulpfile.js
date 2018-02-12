@@ -1,9 +1,12 @@
 const gulp = require('gulp');
 const del = require('del');
-const s3Replace = require('gulp-s3-replace');
+const awspublish = require('gulp-awspublish');
+const rename = require('gulp-rename');
 const awsCredential = require('./aws-credential.js');
 const s3BucketConfig = require('./aws-s3-bucket-config.js');
 const s3BucketConfigWithCredential = Object.assign({}, awsCredential, s3BucketConfig);
+const publisher = awspublish.create(s3BucketConfigWithCredential);
+const headers = {'Cache-Control': 'public, must-revalidate, proxy-revalidate, max-age=0'};
 
 gulp.task('clean', () =>{
     return del(['dist']);
@@ -23,15 +26,11 @@ gulp.task('createBuildDirectory', () => {
 
 gulp.task('s3replaceAndUpload', function(){
     gulp.src(['data/*.js'])
-        .pipe(s3Replace({
-            basePath: './',
-            bucketName: s3BucketConfigWithCredential.params.Bucket,
-            fileExtensions: ['js'],
-            s3: {
-                s3Options: {
-                    accessKeyId: s3BucketConfigWithCredential.accessKeyId,
-                    secretAccessKey: s3BucketConfigWithCredential.secretAccessKey
-                }
-            }
+        .pipe(rename(function (path) {
+            path.dirname += '/data';
+        }))
+        .pipe(publisher.publish(headers))
+        .pipe(awspublish.reporter({
+            states: ['create', 'update', 'delete']
         }));
 });
