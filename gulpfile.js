@@ -13,21 +13,38 @@ gulp.task('clean', () =>{
 })
 ;
 
-gulp.task('zipcode_build',['createBuildDirectory'], () => {
-    gulp.start('s3replaceAndUpload');
+gulp.task('zipcode_build',['createDataDirectory', 'createJsDirectory'], () => {
+    gulp.start('s3replaceAndUploadData');
 })
 ;
 
 gulp.task('createBuildDirectory', () => {
     return gulp.src('data/*.js')
-        .pipe(gulp.dest('dist'));
+        .pipe(gulp.dest('dist/data'));
 })
 ;
 
-gulp.task('s3replaceAndUpload', function(){
-    gulp.src(['data/*.js'])
+gulp.task('createJsDirectory', () => {
+    return gulp.src('script/*.js')
+        .pipe(gulp.dest('dist/script'));
+})
+;
+
+gulp.task('s3replaceAndUploadData', ['s3replaceAndUploadJs'] function(){
+    gulp.src(['dist/data/*.js'])
         .pipe(rename(function (path) {
             path.dirname += '/data';
+        }))
+        .pipe(publisher.publish(headers))
+        .pipe(awspublish.reporter({
+            states: ['create', 'update', 'delete']
+        }));
+});
+
+gulp.task('s3replaceAndUploadData', ['s3replaceAndUploadJs'] function(){
+    gulp.src(['dist/script/*.js'])
+        .pipe(rename(function (path) {
+            path.dirname += '/script';
         }))
         .pipe(publisher.publish(headers))
         .pipe(awspublish.reporter({
