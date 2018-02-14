@@ -30,7 +30,7 @@ gulp.task('createJsDirectory', () => {
 })
 ;
 
-gulp.task('s3replaceAndUploadData', ['s3replaceAndUploadJs'] function(){
+gulp.task('s3replaceAndUploadData', ['s3replaceAndUploadJs'], function(){
     gulp.src(['dist/data/*.js'])
         .pipe(rename(function (path) {
             path.dirname += '/data';
@@ -41,7 +41,7 @@ gulp.task('s3replaceAndUploadData', ['s3replaceAndUploadJs'] function(){
         }));
 });
 
-gulp.task('s3replaceAndUploadData', ['s3replaceAndUploadJs'] function(){
+gulp.task('s3replaceAndUploadJs', function(){
     gulp.src(['dist/script/*.js'])
         .pipe(rename(function (path) {
             path.dirname += '/script';
