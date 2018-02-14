@@ -18,7 +18,7 @@ gulp.task('zipcode_build',['createDataDirectory', 'createJsDirectory'], () => {
 })
 ;
 
-gulp.task('createBuildDirectory', () => {
+gulp.task('createDataDirectory', () => {
     return gulp.src('data/*.js')
         .pipe(gulp.dest('dist/data'));
 })
