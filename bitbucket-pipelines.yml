@@ -1,0 +1,38 @@
+image: node:6.9.4
+
+pipelines:
+  default:
+    - step:
+        name: Deploy to S3
+        trigger: manual
+        caches:
+          - node
+        script: # Modify the commands below to build your repository.
+          - npm install -g gulp@3.9.0
+          - npm install -g bower@1.6.5
+
+          # Create aws-credential.js
+          - touch aws-credential.js
+          - >
+            echo -e
+            "const credential = {};\n
+            credential.accessKeyId = \"$AWS_ACCESS_KEY_ID\";\n
+            credential.secretAccessKey = \"$AWS_SECRET_ACCESS_KEY\";\n
+            credential.region = 'us-west-1';\n
+            module.exports = credential;" > aws-credential.js
+          - cat aws-credential.js
+
+          # Create aws-s3-bucket-config.js
+          - bucketname=zipcode1.huubhr.com
+          - touch aws-s3-bucket-config.js
+          - >
+            echo -e
+            "const path = {};\n
+            path.params = {\"Bucket\": \"$bucketname\"};
+            module.exports = path;" > aws-s3-bucket-config.js
+          - cat aws-s3-bucket-config.js
+
+          - npm install
+          - gulp clean
+          - gulp zipcode_build
+
