@@ -4,7 +4,6 @@ pipelines:
   default:
     - step:
         name: Deploy to S3
-        trigger: manual
         caches:
           - node
         script: # Modify the commands below to build your repository.
