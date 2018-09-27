@@ -3,7 +3,12 @@ image: node:6.9.4
 pipelines:
   default:
     - step:
+        name: Dummy step
+        script:
+          - echo "I'm just a dummy step, as the first step can't be manual step"
+    - step:
         name: Deploy to S3
+        trigger: manual
         caches:
           - node
         script: # Modify the commands below to build your repository.
@@ -34,4 +39,3 @@ pipelines:
           - npm install
           - gulp clean
           - gulp zipcode_build
-
