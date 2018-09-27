@@ -3,15 +3,15 @@ image: node:6.9.4
 pipelines:
   default:
     - step:
-        name: Dummy step
+        name: noop
         script:
-          - echo "I'm just a dummy step, as the first step can't be manual step"
+          - echo "Click RUN on the next step to deploy it to the S3 bucket"
     - step:
         name: Deploy to S3
         trigger: manual
         caches:
           - node
-        script: # Modify the commands below to build your repository.
+        script:
           - npm install -g gulp@3.9.0
           - npm install -g bower@1.6.5
 
@@ -27,7 +27,7 @@ pipelines:
           - cat aws-credential.js
 
           # Create aws-s3-bucket-config.js
-          - bucketname=zipcode1.huubhr.com
+          - bucketname=zipcode.huubhr.com
           - touch aws-s3-bucket-config.js
           - >
             echo -e
